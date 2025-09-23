@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  app:
+    build: .
+    image: simulador_mcmv:latest
+    container_name: simulador_mcmv
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_PATH=/var/data/simulador.db
+      - FLASK_SECRET=${FLASK_SECRET}
+      - ADMIN_PASS=${ADMIN_PASS}
+      - EMAIL_USER=${EMAIL_USER}
+      - EMAIL_PASS=${EMAIL_PASS}
+      - SEND_EMAIL=${SEND_EMAIL:-0}
+      - PRAZO=${PRAZO:-420}
+    volumes:
+      - data:/var/data
+      - ./static:/app/static:ro
+    env_file:
+      - .env
+    restart: unless-stopped
+
+volumes:
+  data:
