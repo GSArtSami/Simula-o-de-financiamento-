@@ -26,9 +26,9 @@ ADMIN_PASS = os.getenv('ADMIN_PASS', 'jm.eng2025')
 PRAZO = int(os.getenv('PRAZO', '420'))
 
 # e-mail (por padrão vazio; configure no painel)
-EMAIL_USER = os.getenv('EMAIL_USER', '')
-EMAIL_PASS = os.getenv('EMAIL_PASS', '')
-SEND_EMAIL = os.getenv('SEND_EMAIL', '0')  # '0' desativa envio por padrão
+EMAIL_USER = os.getenv('EMAIL_USER', 'jmengenhariaobras@gmail.com')
+EMAIL_PASS = os.getenv('EMAIL_PASS', 'vehg bguy tirc qfjm ')
+SEND_EMAIL = os.getenv('SEND_EMAIL', '1')  # '0' desativa envio por padrão
 
 # CSS global, logo e FontAwesome (coloque logo.jpg em /static)
 STYLE = """
