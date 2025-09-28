@@ -9,6 +9,32 @@
 # - Logs mais claros e tratamento de erros mantido
 #
 # **Testar em ambiente de staging antes de subir em produção.**
+from flask import Flask, request, jsonify
+from threading import Thread
+import time, uuid
+
+app = Flask(__name__)
+resultados = {}
+
+def processamento_pesado(dados, task_id):
+    time.sleep(10)  # simula cálculo pesado
+    resultados[task_id] = {"resultado": "ok", "dados": dados}
+
+@app.route("/simular", methods=["POST"])
+def simular():
+    dados = request.json
+    task_id = str(uuid.uuid4())
+    thread = Thread(target=processamento_pesado, args=(dados, task_id))
+    thread.start()
+    return jsonify({"task_id": task_id}), 202
+
+@app.route("/resultado/<task_id>")
+def resultado(task_id):
+    if task_id in resultados:
+        return jsonify({"status": "ok", "dados": resultados[task_id]})
+    return jsonify({"status": "processando"})
+
+
 from flask import Flask, request, session, redirect, url_for, g, render_template_string
 import sqlite3
 from datetime import datetime
