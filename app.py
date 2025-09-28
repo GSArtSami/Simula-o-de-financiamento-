@@ -995,3 +995,4 @@ if __name__ == '__main__':
     logging.info('Iniciando app em %s:%s (debug=%s) — DB=%s', host, port, debug, DB)
     app.run(host=host, port=port, debug=debug)
 
+
