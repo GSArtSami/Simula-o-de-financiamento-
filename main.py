@@ -1,20 +1,4 @@
-import threading, time, requests
-from datetime import datetime
 
-def keep_alive():
-    url = "https://simulador-de-financiamento.onrender.com"  # substitua pelo link do Render
-    while True:
-        agora = datetime.now()
-        if not (2 <= agora.hour < 4):  # pausa entre 2h e 4h
-            try:
-                r = requests.get(url, timeout=10)
-                print(f"[KEEP-ALIVE] Ping enviado às {agora:%H:%M}, status {r.status_code}")
-            except Exception as e:
-                print(f"[KEEP-ALIVE] Erro ao pingar: {e}")
-        time.sleep(600)  # 10 minutos
-
-# inicia o keep-alive em paralelo
-threading.Thread(target=keep_alive, daemon=True).start()
 
 
 from flask import Flask, request, session, redirect, url_for, g, render_template_string
@@ -406,6 +390,23 @@ def get_dados():
     conn.close()
     return dados
 
+import threading, time, requests
+from datetime import datetime
+
+def keep_alive():
+    url = "https://simulador-de-financiamento.onrender.com"  
+    while True:
+        agora = datetime.now()
+        if not (2 <= agora.hour < 4):  # pausa entre 2h e 4h
+            try:
+                r = requests.get(url, timeout=10)
+                print(f"[KEEP-ALIVE] Ping enviado às {agora:%H:%M}, status {r.status_code}")
+            except Exception as e:
+                print(f"[KEEP-ALIVE] Erro ao pingar: {e}")
+        time.sleep(600)  # 10 minutos
+
+# inicia o keep-alive em paralelo
+threading.Thread(target=keep_alive, daemon=True).start()
 # --- Main (mantive a lógica de host/port/debug via env) ---
 if __name__ == '__main__':
     host = os.getenv('HOST', '127.0.0.1')
