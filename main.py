@@ -1,7 +1,15 @@
-try:
-    send_email_async(nome, tel, renda, imovel, price, sac_ini, sac_fim, faixa)
-except Exception:
-    logging.exception('Erro ao iniciar envio de email (ignorado para não afetar UX)')
+threading.Thread(
+    target=send_email_async, 
+    args=(nome, tel, renda, imovel, price, sac_ini, sac_fim, faixa)
+).start()
+
+import time
+start = time.time()
+logging.info("Iniciando /simular")
+
+# ... sua lógica
+
+logging.info("Tempo total /simular: %.2f segundos" % (time.time() - start))
 
 from flask import Flask, request, session, redirect, url_for, g, render_template_string
 import sqlite3
