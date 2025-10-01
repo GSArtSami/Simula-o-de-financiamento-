@@ -1,39 +1,7 @@
-# main.py (versão otimizada para reduzir latência e melhorar fluxo no Render)
-# NOTA: preservei todas as regras de negócio, esquema de banco e valores — nada foi alterado nos dados ou cálculos.
-# Melhorias principais:
-# - Reutilização e gerenciamento eficiente da conexão SQLite (get_db + teardown)
-# - Pragmas SQLite otimizadas (WAL, synchronous NORMAL) para melhor concorrência/escrita
-# - Envio de email executado em thread separada para não bloquear resposta ao usuário
-# - Redução de operações custosas em rotas (queries mínimas, reuse de constantes)
-# - Pequenas micro-otimizações (uso de sqlite3.Row, cursor.lastrowid, cache de HTML estático)
-# - Logs mais claros e tratamento de erros mantido
-#
-# **Testar em ambiente de staging antes de subir em produção.**
-from flask import Flask, request, jsonify
-from threading import Thread
-import time, uuid
-
-app = Flask(__name__)
-resultados = {}
-
-def processamento_pesado(dados, task_id):
-    time.sleep(10)  # simula cálculo pesado
-    resultados[task_id] = {"resultado": "ok", "dados": dados}
-
-@app.route("/simular", methods=["POST"])
-def simular():
-    dados = request.json
-    task_id = str(uuid.uuid4())
-    thread = Thread(target=processamento_pesado, args=(dados, task_id))
-    thread.start()
-    return jsonify({"task_id": task_id}), 202
-
-@app.route("/resultado/<task_id>")
-def resultado(task_id):
-    if task_id in resultados:
-        return jsonify({"status": "ok", "dados": resultados[task_id]})
-    return jsonify({"status": "processando"})
-
+try:
+    send_email_async(nome, tel, renda, imovel, price, sac_ini, sac_fim, faixa)
+except Exception:
+    logging.exception('Erro ao iniciar envio de email (ignorado para não afetar UX)')
 
 from flask import Flask, request, session, redirect, url_for, g, render_template_string
 import sqlite3
